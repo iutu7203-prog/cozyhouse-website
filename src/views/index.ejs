@@ -5,13 +5,17 @@
 <%- include('partials/header', { navbarOverlay: true }) %>
 
 <section class="hero hero-dark">
+  <div class="hero-bg" aria-hidden="true">
+    <img src="/images/placeholder-156-hero.svg" alt="" loading="eager">
+    <span class="hero-bg-overlay"></span>
+  </div>
   <div class="hero-decor" aria-hidden="true">
     <span class="hero-blob hero-blob-1"></span>
     <span class="hero-blob hero-blob-2"></span>
     <span class="hero-blob hero-blob-3"></span>
   </div>
-  <div class="container hero-grid">
-    <div>
+  <div class="container">
+    <div class="hero-text-col">
       <h1 class="hero-title hero-enter hero-enter-1">
         <% var titleWords = settings.hero_title.trim().split(' '); var titleLast = titleWords.pop(); %>
         <%= titleWords.join(' ') %> <span class="accent"><%= titleLast %></span>
@@ -27,9 +31,6 @@
           Nhắn Zalo
         </a>
       </div>
-    </div>
-    <div class="hero-visual hero-enter hero-enter-3">
-      <img src="/images/placeholder-156-hero.svg" alt="Ảnh minh họa mặt tiền Cozy House" width="640" height="800" loading="eager">
     </div>
   </div>
 </section>
