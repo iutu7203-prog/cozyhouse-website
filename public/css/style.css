@@ -508,7 +508,8 @@ noscript .reveal,
   padding-top: calc(76px + var(--space-8));
   padding-bottom: var(--space-9);
   min-height: min(88vh, 780px);
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
 }
 .hero-dark .hero-subtitle { color: rgba(253, 251, 247, 0.72); }
