@@ -1,0 +1,184 @@
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const q = require('../db/queries');
+const { requireAdmin } = require('../middleware/auth');
+const { upload } = require('../middleware/upload');
+
+const router = express.Router();
+
+router.get('/login', (req, res) => {
+  if (req.session && req.session.adminId) {
+    return res.redirect('/admin');
+  }
+  res.render('admin/login', { title: 'Đăng nhập quản trị', error: null, next: req.query.next || '/admin' });
+});
+
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const nextUrl = (req.body.next && req.body.next.startsWith('/admin')) ? req.body.next : '/admin';
+  const admin = q.getAdminByUsername((username || '').trim());
+
+  if (!admin || !bcrypt.compareSync(password || '', admin.password_hash)) {
+    return res.status(401).render('admin/login', {
+      title: 'Đăng nhập quản trị',
+      error: 'Tên đăng nhập hoặc mật khẩu không đúng.',
+      next: nextUrl,
+    });
+  }
+
+  req.session.regenerate((err) => {
+    if (err) {
+      return res.status(500).render('admin/login', { title: 'Đăng nhập quản trị', error: 'Có lỗi xảy ra, thử lại.', next: nextUrl });
+    }
+    req.session.adminId = admin.id;
+    req.session.adminUsername = admin.username;
+    res.redirect(nextUrl);
+  });
+});
+
+router.post('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/admin/login');
+  });
+});
+
+router.use(requireAdmin);
+
+router.use((req, res, next) => {
+  res.locals.unreadCount = q.getUnreadMessageCount();
+  next();
+});
+
+router.get('/', (req, res) => {
+  const locations = q.getAllLocations().map((loc) => ({
+    ...loc,
+    rooms: q.getRoomsByLocationId(loc.id),
+  }));
+  const stats = q.getRoomStats();
+  res.render('admin/dashboard', { title: 'Trang quản trị - Cozy House', locations, stats, unreadCount: res.locals.unreadCount });
+});
+
+// ---- Rooms ----
+router.get('/phong/:id', (req, res) => {
+  const room = q.getRoomById(req.params.id);
+  if (!room) return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
+  const location = q.getLocationById(room.location_id);
+  res.render('admin/room-edit', { title: `Sửa phòng: ${room.name}`, room, location, saved: req.query.saved === '1' });
+});
+
+router.post('/phong/:id', upload.single('image'), (req, res) => {
+  const room = q.getRoomById(req.params.id);
+  if (!room) return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
+
+  const { name, room_type, price, status, area_m2, description, amenities } = req.body;
+  const fields = {
+    name: (name || room.name).trim(),
+    room_type: room_type === 'balcony' ? 'balcony' : 'interior',
+    price: Math.max(0, parseInt(price, 10) || 0),
+    status: status === 'occupied' ? 'occupied' : 'available',
+    area_m2: area_m2 ? parseFloat(area_m2) : null,
+    description: (description || '').trim(),
+    amenities: (amenities || '').trim(),
+  };
+  if (req.file) {
+    fields.image = `/uploads/${req.file.filename}`;
+  }
+
+  q.updateRoom(room.id, fields);
+  res.redirect(`/admin/phong/${room.id}?saved=1`);
+});
+
+// ---- Locations ----
+router.get('/co-so/:id', (req, res) => {
+  const location = q.getLocationById(req.params.id);
+  if (!location) return res.status(404).render('404', { title: 'Không tìm thấy chi nhánh' });
+  res.render('admin/location-edit', { title: `Sửa chi nhánh: ${location.name}`, location, saved: req.query.saved === '1' });
+});
+
+router.post('/co-so/:id', upload.single('hero_image'), (req, res) => {
+  const location = q.getLocationById(req.params.id);
+  if (!location) return res.status(404).render('404', { title: 'Không tìm thấy chi nhánh' });
+
+  const { name, address, description, has_elevator, has_fire_safety } = req.body;
+  const fields = {
+    name: (name || location.name).trim(),
+    address: (address || location.address).trim(),
+    description: (description || '').trim(),
+    has_elevator: has_elevator ? 1 : 0,
+    has_fire_safety: has_fire_safety ? 1 : 0,
+  };
+  if (req.file) {
+    fields.hero_image = `/uploads/${req.file.filename}`;
+  }
+
+  q.updateLocation(location.id, fields);
+  res.redirect(`/admin/co-so/${location.id}?saved=1`);
+});
+
+// ---- Settings ----
+router.get('/cai-dat', (req, res) => {
+  const settings = q.getSettingsMap();
+  res.render('admin/settings', {
+    title: 'Cài đặt chung',
+    settings,
+    saved: req.query.saved === '1',
+    pwError: null,
+    pwSuccess: req.query.pw === '1',
+  });
+});
+
+router.post('/cai-dat', (req, res) => {
+  const {
+    site_name, owner_name, phone, zalo, facebook_url, working_hours,
+    hero_title, hero_subtitle, electricity_price, water_price, service_fee,
+  } = req.body;
+
+  q.updateSettings({
+    site_name, owner_name, phone, zalo, facebook_url, working_hours,
+    hero_title, hero_subtitle, electricity_price, water_price, service_fee,
+  });
+
+  res.redirect('/admin/cai-dat?saved=1');
+});
+
+router.post('/doi-mat-khau', (req, res) => {
+  const { current_password, new_password, confirm_password } = req.body;
+  const admin = q.getAdminByUsername(req.session.adminUsername);
+  const settings = q.getSettingsMap();
+
+  const renderError = (error) => res.status(400).render('admin/settings', {
+    title: 'Cài đặt chung', settings, saved: false, pwError: error, pwSuccess: false,
+  });
+
+  if (!admin || !bcrypt.compareSync(current_password || '', admin.password_hash)) {
+    return renderError('Mật khẩu hiện tại không đúng.');
+  }
+  if (!new_password || new_password.length < 8) {
+    return renderError('Mật khẩu mới phải có ít nhất 8 ký tự.');
+  }
+  if (new_password !== confirm_password) {
+    return renderError('Mật khẩu xác nhận không khớp.');
+  }
+
+  const hash = bcrypt.hashSync(new_password, 10);
+  q.updateAdminPassword(admin.id, hash);
+  res.redirect('/admin/cai-dat?pw=1');
+});
+
+// ---- Contact messages ----
+router.get('/lien-he', (req, res) => {
+  const messages = q.getMessages();
+  res.render('admin/messages', { title: 'Tin nhắn liên hệ', messages });
+});
+
+router.post('/lien-he/:id/da-doc', (req, res) => {
+  q.markMessageRead(req.params.id);
+  res.redirect('/admin/lien-he');
+});
+
+router.post('/lien-he/:id/xoa', (req, res) => {
+  q.deleteMessage(req.params.id);
+  res.redirect('/admin/lien-he');
+});
+
+module.exports = router;

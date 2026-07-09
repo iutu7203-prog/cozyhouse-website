@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('partials/head', { title, description: 'Liên hệ đặt phòng Cozy House qua Zalo, điện thoại hoặc form liên hệ' }) %>
+<body>
+<%- include('partials/header') %>
+
+<section class="section section-notop u-mt-8">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Trang chủ</a> / <span>Liên hệ</span></div>
+    <span class="section-eyebrow">Liên hệ</span>
+    <h1 class="section-title">Liên hệ đặt phòng Cozy House</h1>
+    <p class="section-lead">Nhắn Zalo để phản hồi nhanh nhất, hoặc điền form bên dưới - <%= settings.owner_name %> sẽ liên hệ lại sớm nhất có thể.</p>
+
+    <div class="hero-grid u-mt-8">
+      <div class="card">
+        <div class="card-body">
+          <% if (success) { %>
+            <div class="form-success">Đã gửi yêu cầu liên hệ thành công! <%= settings.owner_name %> sẽ liên hệ lại với bạn sớm nhất.</div>
+          <% } %>
+          <% if (error) { %>
+            <div class="form-error"><%= error %></div>
+          <% } %>
+
+          <form action="/lien-he" method="POST" data-loading-submit novalidate>
+            <div class="form-group">
+              <label class="form-label" for="name">Họ và tên <span class="required">*</span></label>
+              <input type="text" id="name" name="name" required autocomplete="name" value="<%= formData.name || '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="phone">Số điện thoại <span class="required">*</span></label>
+              <input type="tel" id="phone" name="phone" required autocomplete="tel" value="<%= formData.phone || '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="location_interest">Bạn quan tâm chi nhánh nào?</label>
+              <select id="location_interest" name="location_interest">
+                <option value="">Chưa xác định</option>
+                <% locations.forEach(function(loc) { %>
+                  <option value="<%= loc.name %>" <%= formData.location_interest === loc.name ? 'selected' : '' %>><%= loc.name %> (<%= loc.address %>)</option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="message">Lời nhắn</label>
+              <textarea id="message" name="message" rows="4" placeholder="VD: Tôi cần phòng ban công, dọn vào đầu tháng sau"><%= formData.message || '' %></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block u-mt-5">Gửi yêu cầu liên hệ</button>
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <div class="card u-mb-8">
+          <div class="card-body">
+            <h3>Liên hệ trực tiếp</h3>
+            <div class="feature-item u-mt-5">
+              <div class="feature-icon"><%- include('partials/icon', { name: 'phone', cls: 'icon-24' }) %></div>
+              <div>
+                <p class="feature-title">Điện thoại</p>
+                <p class="feature-desc"><a href="<%= fmt.telLink(settings.phone) %>"><%= settings.phone %></a></p>
+              </div>
+            </div>
+            <div class="feature-item u-mt-5">
+              <div class="feature-icon"><%- include('partials/icon', { name: 'chat', cls: 'icon-24' }) %></div>
+              <div>
+                <p class="feature-title">Zalo</p>
+                <p class="feature-desc"><a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener">Chat với <%= settings.owner_name %></a></p>
+              </div>
+            </div>
+            <div class="feature-item u-mt-5">
+              <div class="feature-icon"><%- include('partials/icon', { name: 'clock', cls: 'icon-24' }) %></div>
+              <div>
+                <p class="feature-title">Giờ hỗ trợ</p>
+                <p class="feature-desc mb-0"><%= settings.working_hours %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h3>Địa chỉ chi nhánh</h3>
+            <% locations.forEach(function(loc) { %>
+              <div class="feature-item u-mt-5">
+                <div class="feature-icon"><%- include('partials/icon', { name: 'pin', cls: 'icon-24' }) %></div>
+                <div>
+                  <p class="feature-title"><%= loc.name %></p>
+                  <p class="feature-desc mb-0"><%= loc.address %></p>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<%- include('partials/floating-contact') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

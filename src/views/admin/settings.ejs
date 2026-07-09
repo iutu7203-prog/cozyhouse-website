@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-shell">
+  <%- include('partials/sidebar') %>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="mb-0">Cài đặt chung</h1>
+    </div>
+
+    <% if (saved) { %><div class="form-success">Đã lưu cài đặt.</div><% } %>
+    <% if (pwSuccess) { %><div class="form-success">Đã đổi mật khẩu thành công.</div><% } %>
+    <% if (pwError) { %><div class="form-error"><%= pwError %></div><% } %>
+
+    <div class="admin-card">
+      <h3>Thông tin liên hệ &amp; nội dung trang chủ</h3>
+      <form action="/admin/cai-dat" method="POST" data-loading-submit>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="site_name">Tên website</label>
+            <input type="text" id="site_name" name="site_name" value="<%= settings.site_name %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="owner_name">Tên chủ nhà hiển thị</label>
+            <input type="text" id="owner_name" name="owner_name" value="<%= settings.owner_name %>">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="phone">Số điện thoại</label>
+            <input type="tel" id="phone" name="phone" value="<%= settings.phone %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="zalo">Số Zalo</label>
+            <input type="tel" id="zalo" name="zalo" value="<%= settings.zalo %>">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="facebook_url">Link Facebook (nếu có)</label>
+            <input type="url" id="facebook_url" name="facebook_url" value="<%= settings.facebook_url %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="working_hours">Giờ hỗ trợ</label>
+            <input type="text" id="working_hours" name="working_hours" value="<%= settings.working_hours %>">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="hero_title">Tiêu đề trang chủ</label>
+          <input type="text" id="hero_title" name="hero_title" value="<%= settings.hero_title %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="hero_subtitle">Mô tả ngắn trang chủ</label>
+          <textarea id="hero_subtitle" name="hero_subtitle" rows="3"><%= settings.hero_subtitle %></textarea>
+        </div>
+        <div class="grid-3">
+          <div class="form-group">
+            <label class="form-label" for="electricity_price">Giá điện (đ / kWh)</label>
+            <input type="number" id="electricity_price" name="electricity_price" min="0" value="<%= settings.electricity_price %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="water_price">Giá nước (đ / người / tháng)</label>
+            <input type="number" id="water_price" name="water_price" min="0" value="<%= settings.water_price %>">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="service_fee">Phí dịch vụ (đ / phòng / tháng)</label>
+            <input type="number" id="service_fee" name="service_fee" min="0" value="<%= settings.service_fee %>">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary u-mt-5">Lưu cài đặt</button>
+      </form>
+    </div>
+
+    <div class="admin-card">
+      <h3>Đổi mật khẩu quản trị</h3>
+      <form action="/admin/doi-mat-khau" method="POST" data-loading-submit>
+        <div class="form-group">
+          <label class="form-label" for="current_password">Mật khẩu hiện tại</label>
+          <input type="password" id="current_password" name="current_password" required autocomplete="current-password">
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="new_password">Mật khẩu mới (tối thiểu 8 ký tự)</label>
+            <input type="password" id="new_password" name="new_password" required minlength="8" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="confirm_password">Nhập lại mật khẩu mới</label>
+            <input type="password" id="confirm_password" name="confirm_password" required minlength="8" autocomplete="new-password">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-outline">Đổi mật khẩu</button>
+      </form>
+    </div>
+  </main>
+</div>
+<script src="/js/main.js"></script>
+</body>
+</html>

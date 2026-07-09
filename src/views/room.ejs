@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('partials/head', { title, description: room.description || (room.name + ' tại ' + room.location_name) }) %>
+<body>
+<%- include('partials/header') %>
+
+<section class="section section-notop u-mt-8">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Trang chủ</a> /
+      <a href="/co-so/<%= room.location_slug %>"><%= room.location_name %></a> /
+      <span><%= room.name %></span>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-visual">
+        <img src="<%= room.image %>" alt="Ảnh minh họa <%= room.name %>" width="640" height="800">
+      </div>
+      <div>
+        <span class="room-status <%= room.status %>">
+          <%- include('partials/icon', { name: room.status === 'available' ? 'check' : 'close', cls: 'icon-14' }) %>
+          <%= room.status === 'available' ? 'Còn trống' : 'Đã cho thuê' %>
+        </span>
+        <h1 class="hero-title u-mt-5"><%= room.name %></h1>
+        <div class="location-address">
+          <%- include('partials/icon', { name: 'pin', cls: 'icon-16' }) %>
+          <span><%= room.location_name %> - <%= room.location_address %></span>
+        </div>
+        <div class="room-price"><%= fmt.formatCurrency(room.price) %> <small>/ tháng</small></div>
+        <% if (room.description) { %><p class="section-lead"><%= room.description %></p><% } %>
+
+        <h3>Tiện nghi trong phòng</h3>
+        <div class="amenity-list">
+          <% (room.amenities || '').split(',').filter(Boolean).forEach(function(a) { %>
+            <span class="amenity-chip"><%- include('partials/icon', { name: 'check', cls: 'icon-14' }) %> <%= a.trim() %></span>
+          <% }) %>
+        </div>
+
+        <div class="hero-actions u-mt-5">
+          <a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener" class="btn btn-primary">
+            <%- include('partials/icon', { name: 'chat', cls: 'icon-20' }) %> Nhắn Zalo đặt phòng này
+          </a>
+          <a href="<%= fmt.telLink(settings.phone) %>" class="btn btn-outline">
+            <%- include('partials/icon', { name: 'phone', cls: 'icon-20' }) %> Gọi ngay
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="utility-note">
+      <h3>Chi phí điện nước - dịch vụ</h3>
+      <ul>
+        <li><span>Tiền điện</span><strong><%= fmt.formatCurrency(settings.electricity_price) %> / kWh</strong></li>
+        <li><span>Tiền nước</span><strong><%= fmt.formatCurrency(settings.water_price) %> / người / tháng</strong></li>
+        <li><span>Phí dịch vụ</span><strong><%= fmt.formatCurrency(settings.service_fee) %> / phòng / tháng</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<%- include('partials/floating-contact') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

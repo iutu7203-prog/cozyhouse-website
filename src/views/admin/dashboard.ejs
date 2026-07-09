@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-shell">
+  <%- include('partials/sidebar', { unreadCount }) %>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <h1 class="mb-0">Tổng quan</h1>
+        <p class="section-lead mb-0">Quản lý phòng và thông tin 2 chi nhánh Cozy House.</p>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num"><%= stats.total %></div>
+        <div class="stat-label">Tổng số phòng</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num"><%= stats.available %></div>
+        <div class="stat-label">Phòng còn trống</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num"><%= stats.occupied %></div>
+        <div class="stat-label">Phòng đã cho thuê</div>
+      </div>
+    </div>
+
+    <% locations.forEach(function(loc) { %>
+      <div class="admin-card">
+        <div class="admin-topbar">
+          <h3 class="mb-0"><%= loc.name %></h3>
+          <a href="/admin/co-so/<%= loc.id %>" class="btn btn-outline btn-sm">Sửa thông tin chi nhánh</a>
+        </div>
+        <div class="table-scroll">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Phòng</th><th>Loại</th><th>Giá</th><th>Trạng thái</th><th></th></tr>
+            </thead>
+            <tbody>
+              <% loc.rooms.forEach(function(room) { %>
+              <tr>
+                <td><%= room.name %></td>
+                <td><%= fmt.roomTypeLabel(room.room_type) %></td>
+                <td><%= fmt.formatCurrency(room.price) %></td>
+                <td><span class="room-status <%= room.status %>"><%= room.status === 'available' ? 'Còn trống' : 'Đã cho thuê' %></span></td>
+                <td><a href="/admin/phong/<%= room.id %>" class="btn btn-outline btn-sm">Sửa</a></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% }) %>
+  </main>
+</div>
+</body>
+</html>

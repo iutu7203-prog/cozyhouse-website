@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Ảnh minh họa phòng trong Cozy House">
+  <rect width="400" height="300" fill="#F0E9DA"/>
+  <rect x="24" y="24" width="352" height="252" rx="16" fill="#FDFBF7"/>
+  <rect x="48" y="120" width="150" height="98" rx="10" fill="#E7E0D3"/>
+  <rect x="60" y="132" width="60" height="16" rx="6" fill="#FDFBF7"/>
+  <rect x="60" y="156" width="126" height="52" rx="6" fill="#B45309" opacity="0.4"/>
+  <rect x="216" y="70" width="120" height="148" rx="10" fill="#EFE5D3"/>
+  <rect x="230" y="86" width="92" height="60" rx="6" fill="#FDFBF7"/>
+  <circle cx="276" cy="116" r="16" fill="#B45309" opacity="0.45"/>
+  <rect x="230" y="156" width="92" height="10" rx="5" fill="#DED4BC"/>
+  <rect x="230" y="174" width="65" height="8" rx="4" fill="#E2D8C0"/>
+  <rect x="230" y="190" width="80" height="8" rx="4" fill="#E2D8C0"/>
+  <rect x="48" y="228" width="288" height="10" rx="5" fill="#E7E0D3"/>
+  <text x="200" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#78716C">Ảnh minh họa · phòng trong</text>
+</svg>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('partials/head', { title }) %>
+<body>
+<%- include('partials/header') %>
+<section class="section">
+  <div class="container empty-state">
+    <h1>Lỗi</h1>
+    <h2>Đã có lỗi xảy ra</h2>
+    <p class="section-lead"><%= message %></p>
+    <a href="/" class="btn btn-primary">Về trang chủ</a>
+  </div>
+</section>
+<%- include('partials/footer') %>
+<%- include('partials/floating-contact') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

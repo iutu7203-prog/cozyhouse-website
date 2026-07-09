@@ -1,0 +1,25 @@
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="/" class="brand">
+      <span class="brand-mark">C</span>
+      <span><%= settings.site_name %></span>
+    </a>
+    <nav class="nav-links" id="nav-links">
+      <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Trang chủ</a>
+      <a href="/co-so/156-cong-hoa" class="<%= currentPath === '/co-so/156-cong-hoa' ? 'active' : '' %>">Cozy House 156</a>
+      <a href="/co-so/220-cong-hoa" class="<%= currentPath === '/co-so/220-cong-hoa' ? 'active' : '' %>">Cozy House 220</a>
+      <a href="/bang-gia" class="<%= currentPath === '/bang-gia' ? 'active' : '' %>">Bảng giá</a>
+      <a href="/lien-he" class="<%= currentPath === '/lien-he' ? 'active' : '' %>">Liên hệ</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="<%= fmt.telLink(settings.phone) %>" class="btn btn-outline btn-sm">
+        <%- include('icon', { name: 'phone', cls: 'icon-14' }) %>
+        <span class="hide-mobile"><%= settings.phone %></span>
+      </a>
+      <a href="/lien-he" class="btn btn-primary btn-sm">Đặt phòng</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu" aria-expanded="false" aria-controls="nav-links">
+        <%- include('icon', { name: 'menu' }) %>
+      </button>
+    </div>
+  </div>
+</header>

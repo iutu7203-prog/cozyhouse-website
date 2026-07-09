@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('partials/head', { title, description: location.description }) %>
+<body>
+<%- include('partials/header') %>
+
+<section class="section section-notop u-mt-8">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Trang chủ</a> / <span><%= location.name %></span>
+    </div>
+    <div class="hero-grid">
+      <div>
+        <span class="section-eyebrow">Chi nhánh</span>
+        <h1 class="hero-title"><%= location.name %></h1>
+        <div class="location-address">
+          <%- include('partials/icon', { name: 'pin', cls: 'icon-16' }) %>
+          <span><%= location.address %></span>
+        </div>
+        <p class="section-lead"><%= location.description %></p>
+        <div class="location-badges">
+          <span class="badge"><%- include('partials/icon', { name: 'building', cls: 'icon-14' }) %> <%= location.total_rooms %> phòng full nội thất</span>
+          <% if (location.has_elevator) { %><span class="badge"><%- include('partials/icon', { name: 'elevator', cls: 'icon-14' }) %> Có thang máy</span><% } %>
+          <% if (location.has_fire_safety) { %><span class="badge"><%- include('partials/icon', { name: 'shield', cls: 'icon-14' }) %> PCCC &amp; an ninh hiện đại</span><% } %>
+        </div>
+        <div class="hero-actions">
+          <a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener" class="btn btn-primary">
+            <%- include('partials/icon', { name: 'chat', cls: 'icon-20' }) %> Nhắn Zalo hỏi phòng
+          </a>
+          <a href="<%= fmt.telLink(settings.phone) %>" class="btn btn-outline">
+            <%- include('partials/icon', { name: 'phone', cls: 'icon-20' }) %> Gọi <%= settings.phone %>
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="<%= location.hero_image %>" alt="Ảnh minh họa <%= location.name %>" width="640" height="800">
+      </div>
+    </div>
+  </div>
+</section>
+
+<% if (balconyRooms.length) { %>
+<section class="section section-notop">
+  <div class="container">
+    <h2 class="section-title">Phòng ban công (<%= balconyRooms.length %>)</h2>
+    <p class="section-lead u-mb-8">Phòng có cửa sổ/ban công thoáng khí, đón sáng tự nhiên.</p>
+    <div class="grid-3">
+      <% balconyRooms.forEach(function(room) { %>
+        <%- include('partials/room-card', { room }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<% if (interiorRooms.length) { %>
+<section class="section section-notop">
+  <div class="container">
+    <h2 class="section-title">Phòng trong (<%= interiorRooms.length %>)</h2>
+    <p class="section-lead u-mb-8">Phòng khép kín, riêng tư, đầy đủ nội thất tiện nghi.</p>
+    <div class="grid-3">
+      <% interiorRooms.forEach(function(room) { %>
+        <%- include('partials/room-card', { room }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<section class="section section-notop">
+  <div class="container">
+    <h2 class="section-title">Vị trí</h2>
+    <div class="table-scroll">
+      <iframe class="map-frame" loading="lazy" title="Bản đồ <%= location.name %>"
+        src="https://www.google.com/maps?q=<%= encodeURIComponent(location.address) %>&output=embed"></iframe>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h3>Quan tâm phòng tại <%= location.name %>?</h3>
+        <p>Nhắn Zalo để được gửi ảnh thực tế và xếp lịch xem phòng phù hợp.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener" class="btn btn-primary">Chat Zalo ngay</a>
+        <a href="/lien-he" class="btn btn-outline-light">Gửi yêu cầu liên hệ</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<%- include('partials/floating-contact') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

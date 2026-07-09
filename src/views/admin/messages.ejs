@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-shell">
+  <%- include('partials/sidebar') %>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="mb-0">Tin nhắn liên hệ</h1>
+    </div>
+
+    <% if (!messages.length) { %>
+      <div class="admin-card">
+        <p class="mb-0">Chưa có tin nhắn liên hệ nào từ website.</p>
+      </div>
+    <% } %>
+
+    <% messages.forEach(function(msg) { %>
+      <div class="admin-card">
+        <div class="admin-topbar">
+          <div>
+            <h3 class="mb-0"><%= msg.name %> <% if (!msg.is_read) { %><span class="badge">Mới</span><% } %></h3>
+            <p class="section-lead mb-0"><%= msg.created_at %> &middot; Quan tâm: <%= msg.location_interest || 'Chưa xác định' %></p>
+          </div>
+          <div class="row-actions">
+            <a href="<%= fmt.telLink(msg.phone) %>" class="btn btn-outline btn-sm"><%= msg.phone %></a>
+            <a href="<%= fmt.zaloLink(msg.phone) %>" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Zalo</a>
+            <% if (!msg.is_read) { %>
+            <form action="/admin/lien-he/<%= msg.id %>/da-doc" method="POST">
+              <button type="submit" class="btn btn-outline btn-sm">Đánh dấu đã đọc</button>
+            </form>
+            <% } %>
+            <form action="/admin/lien-he/<%= msg.id %>/xoa" method="POST" data-confirm="Xóa tin nhắn này?">
+              <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+            </form>
+          </div>
+        </div>
+        <% if (msg.message) { %><p class="mb-0"><%= msg.message %></p><% } %>
+      </div>
+    <% }) %>
+  </main>
+</div>
+<script src="/js/main.js"></script>
+</body>
+</html>

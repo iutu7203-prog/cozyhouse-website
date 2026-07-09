@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('partials/head', { title, description: 'Bảng giá phòng đầy đủ nội thất tại Cozy House 156 và Cozy House 220' }) %>
+<body>
+<%- include('partials/header') %>
+
+<section class="section section-notop u-mt-8">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Trang chủ</a> / <span>Bảng giá</span></div>
+    <span class="section-eyebrow">Bảng giá</span>
+    <h1 class="section-title">Bảng giá phòng Cozy House</h1>
+    <p class="section-lead">Giá phòng đã bao gồm nội thất đầy đủ. Chi phí điện, nước, dịch vụ tính riêng theo mức sử dụng thực tế.</p>
+  </div>
+</section>
+
+<% locations.forEach(function(loc) { %>
+<section class="section section-notop">
+  <div class="container">
+    <h2 class="section-title"><%= loc.name %></h2>
+    <p class="section-lead u-mb-8"><%= loc.address %></p>
+    <div class="table-scroll">
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Phòng</th>
+            <th>Loại phòng</th>
+            <th>Giá / tháng</th>
+            <th>Trạng thái</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% loc.rooms.forEach(function(room) { %>
+          <tr>
+            <td><%= room.name %></td>
+            <td><%= fmt.roomTypeLabel(room.room_type) %></td>
+            <td><%= fmt.formatCurrency(room.price) %></td>
+            <td>
+              <span class="room-status <%= room.status %>">
+                <%= room.status === 'available' ? 'Còn trống' : 'Đã cho thuê' %>
+              </span>
+            </td>
+            <td><a href="/phong/<%= room.slug %>" class="btn btn-outline btn-sm">Chi tiết</a></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<% }) %>
+
+<section class="section section-notop">
+  <div class="container">
+    <div class="utility-note">
+      <h3>Chi phí điện, nước, dịch vụ (áp dụng cả 2 chi nhánh)</h3>
+      <ul>
+        <li><span>Tiền điện</span><strong><%= fmt.formatCurrency(settings.electricity_price) %> / kWh</strong></li>
+        <li><span>Tiền nước</span><strong><%= fmt.formatCurrency(settings.water_price) %> / người / tháng</strong></li>
+        <li><span>Phí dịch vụ</span><strong><%= fmt.formatCurrency(settings.service_fee) %> / phòng / tháng</strong></li>
+      </ul>
+      <p class="form-help u-mt-5 mb-0">Giá phòng có thể được điều chỉnh theo từng thời điểm - vui lòng liên hệ Zalo/điện thoại để được báo giá và tư vấn chính xác nhất.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h3>Cần tư vấn thêm về giá phòng?</h3>
+        <p>Nhắn Zalo hoặc gọi điện, <%= settings.owner_name %> sẽ hỗ trợ trực tiếp.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener" class="btn btn-primary">Chat Zalo ngay</a>
+        <a href="<%= fmt.telLink(settings.phone) %>" class="btn btn-outline-light">Gọi <%= settings.phone %></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<%- include('partials/floating-contact') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<aside class="admin-sidebar">
+  <div class="brand">
+    <span class="brand-mark">C</span>
+    <span><%= settings.site_name %> Admin</span>
+  </div>
+  <nav class="admin-nav">
+    <a href="/admin" class="<%= currentPath === '/admin' ? 'active' : '' %>">
+      <%- include('../../partials/icon', { name: 'building', cls: 'icon-18' }) %> Tổng quan
+    </a>
+    <a href="/admin/lien-he" class="<%= currentPath === '/admin/lien-he' ? 'active' : '' %>">
+      <%- include('../../partials/icon', { name: 'mail', cls: 'icon-18' }) %> Tin nhắn liên hệ
+      <% if (typeof unreadCount !== 'undefined' && unreadCount > 0) { %><span class="badge-count"><%= unreadCount %></span><% } %>
+    </a>
+    <a href="/admin/cai-dat" class="<%= currentPath === '/admin/cai-dat' ? 'active' : '' %>">
+      <%- include('../../partials/icon', { name: 'tool', cls: 'icon-18' }) %> Cài đặt chung
+    </a>
+    <a href="/" target="_blank" rel="noopener">
+      <%- include('../../partials/icon', { name: 'arrow', cls: 'icon-18' }) %> Xem website
+    </a>
+  </nav>
+  <form action="/admin/logout" method="POST" class="u-mt-8">
+    <button type="submit" class="btn btn-outline-light btn-sm btn-block">Đăng xuất</button>
+  </form>
+</aside>

@@ -1,0 +1,21 @@
+<% /* Can truyen local `room` khi include partial nay */ %>
+<div class="card">
+  <div class="card-img">
+    <img src="<%= room.image %>" alt="Ảnh minh họa <%= room.name %>" loading="lazy">
+  </div>
+  <div class="room-card-body">
+    <span class="room-status <%= room.status %>">
+      <%- include('icon', { name: room.status === 'available' ? 'check' : 'close', cls: 'icon-14' }) %>
+      <%= room.status === 'available' ? 'Còn trống' : 'Đã cho thuê' %>
+    </span>
+    <h3 class="card-title u-mt-5"><%= room.name %></h3>
+    <div class="card-meta"><%= fmt.roomTypeLabel(room.room_type) %></div>
+    <div class="room-price"><%= fmt.formatCurrency(room.price) %> <small>/ tháng</small></div>
+    <div class="amenity-list">
+      <% (room.amenities || '').split(',').filter(Boolean).forEach(function(a) { %>
+        <span class="amenity-chip"><%= a.trim() %></span>
+      <% }) %>
+    </div>
+    <a href="/phong/<%= room.slug %>" class="btn btn-outline btn-block">Xem chi tiết phòng</a>
+  </div>
+</div>

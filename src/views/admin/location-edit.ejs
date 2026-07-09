@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-shell">
+  <%- include('partials/sidebar') %>
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <h1 class="mb-0">Sửa chi nhánh: <%= location.name %></h1>
+      </div>
+      <a href="/admin" class="btn btn-outline btn-sm">Quay lại</a>
+    </div>
+
+    <% if (saved) { %><div class="form-success">Đã lưu thay đổi.</div><% } %>
+
+    <div class="admin-card">
+      <form action="/admin/co-so/<%= location.id %>" method="POST" enctype="multipart/form-data" data-loading-submit>
+        <div class="form-group">
+          <label class="form-label" for="name">Tên chi nhánh</label>
+          <input type="text" id="name" name="name" value="<%= location.name %>" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="address">Địa chỉ</label>
+          <input type="text" id="address" name="address" value="<%= location.address %>" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="description">Mô tả</label>
+          <textarea id="description" name="description" rows="4"><%= location.description %></textarea>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-row"><input type="checkbox" name="has_elevator" <%= location.has_elevator ? 'checked' : '' %>> Có thang máy</label>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-row"><input type="checkbox" name="has_fire_safety" <%= location.has_fire_safety ? 'checked' : '' %>> Có hệ thống PCCC / an ninh hiện đại</label>
+        </div>
+        <div class="form-group mb-0">
+          <label class="form-label">Ảnh đại diện chi nhánh</label>
+          <div class="current-image-preview">
+            <img src="<%= location.hero_image %>" alt="Ảnh hiện tại của <%= location.name %>">
+          </div>
+          <input type="file" name="hero_image" accept="image/jpeg,image/png,image/webp">
+          <p class="form-help">Ảnh JPG/PNG/WEBP, tối đa 4MB. Để trống nếu không muốn đổi ảnh.</p>
+        </div>
+        <button type="submit" class="btn btn-primary u-mt-5">Lưu thay đổi</button>
+      </form>
+    </div>
+  </main>
+</div>
+<script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<%- include('partials/head', { title }) %>
+<body>
+<%- include('partials/header') %>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="section-eyebrow">Hệ thống cho thuê phòng trọ</span>
+      <h1 class="hero-title"><%= settings.hero_title %></h1>
+      <p class="hero-subtitle"><%= settings.hero_subtitle %></p>
+      <div class="hero-actions">
+        <a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener" class="btn btn-primary">
+          <%- include('partials/icon', { name: 'chat', cls: 'icon-20' }) %>
+          Nhắn Zalo đặt phòng
+        </a>
+        <a href="<%= fmt.telLink(settings.phone) %>" class="btn btn-outline">
+          <%- include('partials/icon', { name: 'phone', cls: 'icon-20' }) %>
+          Gọi <%= settings.phone %>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">13</div>
+          <div class="hero-stat-label">Phòng full nội thất</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">02</div>
+          <div class="hero-stat-label">Chi nhánh Cộng Hòa</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">24/7</div>
+          <div class="hero-stat-label">An ninh giám sát</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="/images/placeholder-156-hero.svg" alt="Ảnh minh họa mặt tiền Cozy House" width="640" height="800" loading="eager">
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <span class="section-eyebrow">Chi nhánh</span>
+    <h2 class="section-title">Chọn chi nhánh Cozy House phù hợp với bạn</h2>
+    <p class="section-lead">Cả 2 chi nhánh đều nằm trên trục đường Cộng Hòa, khu vực Bảy Hiền - Tân Bình, thuận tiện di chuyển và đầy đủ nội thất, sẵn sàng dọn vào ở.</p>
+  </div>
+</section>
+
+<section class="section section-notop">
+  <div class="container">
+    <% locations.forEach(function(loc) { %>
+      <div class="card location-card u-mb-8">
+        <div class="card-img">
+          <img src="<%= loc.hero_image %>" alt="Ảnh minh họa <%= loc.name %>" loading="lazy">
+        </div>
+        <div class="location-card-body">
+          <h3 class="card-title"><%= loc.name %></h3>
+          <div class="location-address">
+            <%- include('partials/icon', { name: 'pin', cls: 'icon-16' }) %>
+            <span><%= loc.address %></span>
+          </div>
+          <div class="location-badges">
+            <span class="badge"><%- include('partials/icon', { name: 'building', cls: 'icon-14' }) %> <%= loc.total_rooms %> phòng full nội thất</span>
+            <% if (loc.has_elevator) { %><span class="badge"><%- include('partials/icon', { name: 'elevator', cls: 'icon-14' }) %> Có thang máy</span><% } %>
+            <% if (loc.has_fire_safety) { %><span class="badge"><%- include('partials/icon', { name: 'shield', cls: 'icon-14' }) %> PCCC &amp; an ninh hiện đại</span><% } %>
+            <span class="badge"><%- include('partials/icon', { name: 'check', cls: 'icon-14' }) %> Còn <%= loc.availableCount %> phòng trống</span>
+          </div>
+          <div class="location-price">
+            <%= fmt.formatCurrency(loc.minPrice) %> - <%= fmt.formatCurrency(loc.maxPrice) %>
+            <small>/ tháng</small>
+          </div>
+          <p class="section-lead mb-0"><%= loc.description %></p>
+          <div class="hero-actions u-mt-5 u-mb-0">
+            <a href="/co-so/<%= loc.slug %>" class="btn btn-dark">
+              Xem danh sách phòng
+              <%- include('partials/icon', { name: 'arrow', cls: 'icon-16' }) %>
+            </a>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="container">
+    <span class="section-eyebrow">Vì sao chọn Cozy House</span>
+    <h2 class="section-title">Ở thoải mái, quản lý minh bạch</h2>
+    <p class="section-lead">Tất cả các phòng đều được trang bị đầy đủ nội thất, chi phí điện nước dịch vụ rõ ràng ngay từ đầu.</p>
+    <div class="grid-3 u-mt-8">
+      <div class="feature-item">
+        <div class="feature-icon"><%- include('partials/icon', { name: 'bed', cls: 'icon-24' }) %></div>
+        <div>
+          <p class="feature-title">Nội thất đầy đủ</p>
+          <p class="feature-desc">Giường, tủ quần áo, bàn trang điểm, tủ lạnh, máy lạnh, máy giặt, WC riêng - dọn vào ở ngay.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><%- include('partials/icon', { name: 'shield', cls: 'icon-24' }) %></div>
+        <div>
+          <p class="feature-title">An toàn, an ninh</p>
+          <p class="feature-desc">Cozy House 156 trang bị hệ thống PCCC và an ninh hiện đại, có thang máy phục vụ di chuyển.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><%- include('partials/icon', { name: 'zap', cls: 'icon-24' }) %></div>
+        <div>
+          <p class="feature-title">Chi phí minh bạch</p>
+          <p class="feature-desc">Điện <%= fmt.formatCurrency(settings.electricity_price) %>/kWh, nước <%= fmt.formatCurrency(settings.water_price) %>/người, dịch vụ <%= fmt.formatCurrency(settings.service_fee) %>/phòng - không phát sinh.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><%- include('partials/icon', { name: 'pin', cls: 'icon-24' }) %></div>
+        <div>
+          <p class="feature-title">Vị trí trung tâm</p>
+          <p class="feature-desc">Ngay trục đường Cộng Hòa, khu vực Bảy Hiền - Tân Bình, gần sân bay Tân Sơn Nhất.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><%- include('partials/icon', { name: 'chat', cls: 'icon-24' }) %></div>
+        <div>
+          <p class="feature-title">Phản hồi nhanh</p>
+          <p class="feature-desc">Liên hệ trực tiếp qua Zalo hoặc điện thoại, hỗ trợ xem phòng và đặt phòng nhanh chóng.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><%- include('partials/icon', { name: 'tool', cls: 'icon-24' }) %></div>
+        <div>
+          <p class="feature-title">Chủ nhà hỗ trợ trực tiếp</p>
+          <p class="feature-desc">Quản lý bởi <%= settings.owner_name %>, xử lý sự cố và hỗ trợ khách thuê nhanh chóng, tận tình.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h3>Sẵn sàng dọn vào ở?</h3>
+        <p>Nhắn Zalo hoặc gọi điện ngay để được tư vấn phòng trống và lịch xem phòng.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener" class="btn btn-primary">Chat Zalo ngay</a>
+        <a href="/lien-he" class="btn btn-outline-light">Gửi yêu cầu liên hệ</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<%- include('partials/floating-contact') %>
+<script src="/js/main.js"></script>
+</body>
+</html>
