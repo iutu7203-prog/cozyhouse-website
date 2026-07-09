@@ -18,7 +18,13 @@ function withRoomSummary(location) {
 
 router.get('/', (req, res) => {
   const locations = q.getAllLocations().map(withRoomSummary);
-  res.render('index', { title: 'Cozy House - Phòng trọ đầy đủ nội thất tại TP.HCM', locations });
+  const allRooms = q.getAllRoomsWithLocation();
+  const featuredRooms = allRooms.filter((r) => r.status === 'available').slice(0, 6);
+  res.render('index', {
+    title: 'Cozy House - Phòng trọ đầy đủ nội thất tại TP.HCM',
+    locations,
+    featuredRooms: featuredRooms.length ? featuredRooms : allRooms.slice(0, 6),
+  });
 });
 
 router.get('/co-so/:slug', (req, res) => {

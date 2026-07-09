@@ -253,6 +253,7 @@ input:focus, textarea:focus, select:focus {
 @media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr; gap: var(--space-6); } }
 .footer h4 { color: #fff; font-family: var(--font-body); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-4); }
 .footer a { display: block; padding: 6px 0; transition: color var(--transition); }
+.footer-grid span { display: block; padding: 6px 0; }
 .footer a:hover { color: #fff; }
 .footer-brand { color: #fff; font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: var(--space-3); }
 .footer-bottom { border-top: 1px solid rgba(253, 251, 247, 0.12); margin-top: var(--space-7); padding-top: var(--space-5); display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3); font-size: 0.85rem; }
@@ -352,6 +353,9 @@ svg { width: 20px; height: 20px; flex-shrink: 0; }
 .u-mb-8 { margin-bottom: 32px; }
 .u-mb-0 { margin-bottom: 0; }
 .u-mt-8 { margin-top: 32px; }
+.u-text-center { text-align: center; }
+.u-center-block { margin-left: auto; margin-right: auto; }
+.stats-row-flat { margin-top: 0; border-top: none; padding-top: 0; }
 
 /* ============================================================
    Motion: hero decor, entrance, scroll-reveal, hover feedback
@@ -469,3 +473,186 @@ noscript .reveal,
 
 /* So lieu dem tang dan trong hero-stats: tranh nhay layout khi doi noi dung */
 .hero-stat-num { font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   Trang chu kieu moi: navbar phu, hero toi, carousel, dai thong
+   ke, hang dich vu dang tron, footer CTA hop nhat
+   ============================================================ */
+
+/* Navbar overlay (chi dung tren trang chu, phu len hero toi) */
+.navbar-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: transparent;
+  border-bottom-color: transparent;
+}
+.navbar-overlay .brand,
+.navbar-overlay .nav-links a,
+.navbar-overlay .nav-toggle { color: var(--color-primary-fg); }
+.navbar-overlay .nav-cta .btn-outline { border-color: rgba(253, 251, 247, 0.35); color: var(--color-primary-fg); }
+.navbar-overlay .nav-cta .btn-outline:hover { border-color: var(--color-primary-fg); }
+.navbar-overlay.is-scrolled {
+  background: rgba(28, 25, 23, 0.94);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+@media (max-width: 900px) {
+  .navbar-overlay .nav-links.is-open a { color: var(--color-fg); }
+}
+
+/* Hero toi (trang chu) */
+.hero-dark {
+  background:
+    radial-gradient(1100px 560px at 12% -15%, rgba(180, 83, 9, 0.28), transparent 60%),
+    linear-gradient(160deg, #201c1a 0%, #2a2521 55%, #1c1917 100%);
+  color: var(--color-primary-fg);
+  padding-top: calc(76px + var(--space-8));
+}
+.hero-dark .hero-subtitle { color: rgba(253, 251, 247, 0.72); }
+.hero-dark .hero-stat-label { color: rgba(253, 251, 247, 0.6); }
+.hero-dark .btn-outline { border-color: rgba(253, 251, 247, 0.35); color: var(--color-primary-fg); }
+.hero-dark .btn-outline:hover { border-color: var(--color-primary-fg); color: #fff; }
+.hero-dark .hero-visual { box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45); }
+
+/* Duong song lam gach noi giua hero toi va section sang phia duoi */
+.wave-divider { display: block; width: 100%; height: 64px; margin-top: -1px; }
+.wave-divider path { fill: var(--color-bg); }
+
+/* ==== Carousel dung chung (phong noi bat, khong gian) ==== */
+.carousel { position: relative; }
+.carousel-track {
+  display: flex;
+  gap: var(--space-5);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 4px 4px 8px;
+  margin: 0 -4px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-item {
+  scroll-snap-align: start;
+  flex: 0 0 calc(33.333% - 14px);
+  min-width: 240px;
+}
+@media (max-width: 900px) { .carousel-item { flex-basis: 68%; } }
+@media (max-width: 560px) { .carousel-item { flex-basis: 84%; } }
+
+.carousel-arrow {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-md);
+  z-index: 5;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+.carousel-arrow:hover { background: var(--color-accent); border-color: var(--color-accent); color: #fff; transform: translateY(-50%) scale(1.06); }
+.carousel-arrow.prev { left: -12px; }
+.carousel-arrow.next { right: -12px; }
+.carousel-arrow:disabled { opacity: 0.35; pointer-events: none; }
+@media (max-width: 900px) { .carousel-arrow { display: none; } }
+
+.carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: var(--space-6); }
+.carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-border); transition: background var(--transition), width var(--transition); padding: 0; }
+.carousel-dot.is-active { background: var(--color-accent); width: 22px; border-radius: 4px; }
+
+/* Card cho carousel: phong noi bat / khong gian */
+.feature-card {
+  height: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.feature-card-img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--color-muted-bg); }
+.feature-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1); }
+.feature-card:hover .feature-card-img img { transform: scale(1.06); }
+.feature-tag {
+  position: absolute; top: 14px; left: 14px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(253, 251, 247, 0.95); color: var(--color-fg);
+  padding: 6px 12px; border-radius: 999px; font-size: 0.76rem; font-weight: 600;
+}
+.feature-card-body { padding: var(--space-5); }
+.feature-card-title { font-size: 1.05rem; margin-bottom: 4px; }
+.feature-card-meta { color: var(--color-fg-muted); font-size: 0.86rem; display: flex; align-items: center; gap: 6px; margin-bottom: 0; }
+.feature-card-price { color: var(--color-accent); font-weight: 700; font-family: var(--font-heading); margin-top: 8px; }
+
+/* ==== Dai thong ke toi ==== */
+.stats-band {
+  background: var(--color-primary);
+  color: var(--color-primary-fg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-7);
+}
+.stats-band-grid { display: grid; grid-template-columns: 0.75fr 1.25fr; gap: var(--space-8); align-items: center; }
+@media (max-width: 900px) { .stats-band-grid { grid-template-columns: 1fr; gap: var(--space-6); } }
+.stats-big-number {
+  text-align: center;
+  border: 1px dashed rgba(253, 251, 247, 0.25);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  width: min(220px, 100%);
+  margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.stats-big-number .num { font-family: var(--font-heading); font-size: clamp(2.6rem, 6vw, 3.6rem); color: var(--color-accent); line-height: 1; }
+.stats-big-number .label { margin-top: 8px; font-size: 0.95rem; color: rgba(253, 251, 247, 0.75); text-align: center; padding: 0 12px; }
+.stats-band h2 { color: var(--color-primary-fg); }
+.stats-band .section-lead { color: rgba(253, 251, 247, 0.7); }
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-5);
+  margin-top: var(--space-6); padding-top: var(--space-6);
+  border-top: 1px solid rgba(253, 251, 247, 0.12);
+}
+@media (max-width: 640px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+.stats-row-item { display: flex; align-items: center; gap: 10px; }
+.stats-row-item .icon-badge {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid rgba(253, 251, 247, 0.25);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-accent); flex-shrink: 0;
+}
+.stats-row-item .val { font-weight: 700; font-size: 1.05rem; line-height: 1.2; }
+.stats-row-item .lbl { font-size: 0.76rem; color: rgba(253, 251, 247, 0.6); }
+
+/* ==== Hang dich vu dang icon tron (sang) ==== */
+.service-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-5); }
+@media (max-width: 960px) { .service-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .service-row { grid-template-columns: repeat(2, 1fr); } }
+.service-item { text-align: center; padding: var(--space-3); }
+.service-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  border: 1.5px solid var(--color-border);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto var(--space-4); color: var(--color-accent);
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+.service-item:hover .service-icon { border-color: var(--color-accent); background: var(--color-muted-bg); transform: translateY(-4px); }
+.service-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
+.service-desc { font-size: 0.82rem; color: var(--color-fg-muted); margin: 0; }
+
+/* ==== Footer CTA hop nhat ==== */
+.footer-cta-row {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-6); flex-wrap: wrap;
+  padding-bottom: var(--space-7); margin-bottom: var(--space-7);
+  border-bottom: 1px solid rgba(253, 251, 247, 0.12);
+}
+.footer-cta-row h2 { color: #fff; font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 8px; }
+.footer-cta-row .accent { color: var(--color-accent); }
+.footer-cta-row p { color: rgba(253, 251, 247, 0.65); max-width: 420px; }
+.footer-contact-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.footer-contact-item .icon-badge {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(253, 251, 247, 0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-accent); flex-shrink: 0;
+}

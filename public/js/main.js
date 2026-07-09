@@ -102,4 +102,54 @@
     updateNavbarShadow();
     window.addEventListener('scroll', updateNavbarShadow, { passive: true });
   }
+
+  // Carousel dung chung: nut prev/next + cham (dot) dong bo theo item dang hien
+  document.querySelectorAll('.carousel').forEach(function (carousel) {
+    var track = carousel.querySelector('.carousel-track');
+    var items = Array.prototype.slice.call(carousel.querySelectorAll('.carousel-item'));
+    var prevBtn = carousel.querySelector('.carousel-arrow.prev');
+    var nextBtn = carousel.querySelector('.carousel-arrow.next');
+    var dotsWrap = carousel.querySelector('.carousel-dots');
+    if (!track || !items.length) return;
+
+    var dots = [];
+    if (dotsWrap) {
+      dotsWrap.innerHTML = '';
+      items.forEach(function (_, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'carousel-dot' + (i === 0 ? ' is-active' : '');
+        dot.setAttribute('aria-label', 'Đi tới mục ' + (i + 1));
+        dot.addEventListener('click', function () {
+          items[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        });
+        dotsWrap.appendChild(dot);
+        dots.push(dot);
+      });
+    }
+
+    var setActiveDot = function (idx) {
+      dots.forEach(function (d, i) { d.classList.toggle('is-active', i === idx); });
+    };
+
+    if ('IntersectionObserver' in window) {
+      var activeIndex = 0;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+            var idx = items.indexOf(entry.target);
+            if (idx !== -1) { activeIndex = idx; setActiveDot(idx); }
+          }
+        });
+      }, { root: track, threshold: [0.6] });
+      items.forEach(function (item) { io.observe(item); });
+    }
+
+    var scrollByItem = function (dir) {
+      var itemWidth = items[0].getBoundingClientRect().width + 20;
+      track.scrollBy({ left: dir * itemWidth, behavior: 'smooth' });
+    };
+    if (prevBtn) prevBtn.addEventListener('click', function () { scrollByItem(-1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { scrollByItem(1); });
+  });
 })();

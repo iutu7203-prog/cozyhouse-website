@@ -1,22 +1,47 @@
 <footer class="footer">
-  <div class="container footer-grid">
-    <div>
-      <div class="footer-brand"><%= settings.site_name %></div>
-      <p>Hệ thống phòng trọ đầy đủ nội thất, an toàn, ngay khu vực Cộng Hòa - Bảy Hiền, Tân Bình, TP. Hồ Chí Minh.</p>
-      <p class="mb-0">Quản lý: <%= settings.owner_name %></p>
+  <div class="container">
+    <div class="footer-cta-row">
+      <div>
+        <h2>Sẵn sàng dọn vào ở? <span class="accent">Liên hệ ngay.</span></h2>
+        <p>Nhắn Zalo hoặc gọi điện để được tư vấn phòng trống và xếp lịch xem phòng phù hợp.</p>
+        <a href="/lien-he" class="btn btn-primary u-mt-5">
+          Liên hệ ngay
+          <%- include('icon', { name: 'arrow', cls: 'icon-16' }) %>
+        </a>
+      </div>
+      <div class="footer-contact-list">
+        <div class="footer-contact-item">
+          <span class="icon-badge"><%- include('icon', { name: 'phone', cls: 'icon-18' }) %></span>
+          <a href="<%= fmt.telLink(settings.phone) %>" class="mb-0"><%= settings.phone %></a>
+        </div>
+        <div class="footer-contact-item">
+          <span class="icon-badge"><%- include('icon', { name: 'chat', cls: 'icon-18' }) %></span>
+          <a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener" class="mb-0">Zalo: <%= settings.zalo %></a>
+        </div>
+        <div class="footer-contact-item">
+          <span class="icon-badge"><%- include('icon', { name: 'pin', cls: 'icon-18' }) %></span>
+          <span>156/1/17 &amp; 220 Cộng Hòa, TP. Hồ Chí Minh</span>
+        </div>
+      </div>
     </div>
-    <div>
-      <h4>Chi nhánh</h4>
-      <a href="/co-so/156-cong-hoa">Cozy House 156</a>
-      <a href="/co-so/220-cong-hoa">Cozy House 220</a>
-      <a href="/bang-gia">Bảng giá phòng</a>
-      <a href="/lien-he">Liên hệ đặt phòng</a>
-    </div>
-    <div>
-      <h4>Liên hệ</h4>
-      <a href="<%= fmt.telLink(settings.phone) %>"><%= settings.phone %> (gọi điện)</a>
-      <a href="<%= fmt.zaloLink(settings.zalo) %>" target="_blank" rel="noopener">Chat Zalo: <%= settings.zalo %></a>
-      <a href="#" class="mb-0"><%= settings.working_hours %></a>
+
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><%= settings.site_name %></div>
+        <p>Hệ thống phòng trọ đầy đủ nội thất, an toàn, ngay khu vực Cộng Hòa - Bảy Hiền, Tân Bình, TP. Hồ Chí Minh.</p>
+        <p class="mb-0">Quản lý: <%= settings.owner_name %></p>
+      </div>
+      <div>
+        <h4>Chi nhánh</h4>
+        <a href="/co-so/156-cong-hoa">Cozy House 156</a>
+        <a href="/co-so/220-cong-hoa">Cozy House 220</a>
+        <a href="/bang-gia">Bảng giá phòng</a>
+        <a href="/lien-he">Liên hệ đặt phòng</a>
+      </div>
+      <div>
+        <h4>Hỗ trợ</h4>
+        <span class="mb-0"><%= settings.working_hours %></span>
+      </div>
     </div>
   </div>
   <div class="container footer-bottom">
