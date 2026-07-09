@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Ảnh minh họa hệ thống an ninh và PCCC Cozy House">
+  <rect width="400" height="300" fill="#211D1B"/>
+  <rect x="24" y="24" width="352" height="252" rx="16" fill="#292524"/>
+  <path d="M200 66 l70 26 v58 c0 54 -30 90 -70 104 c-40 -14 -70 -50 -70 -104 v-58 z" fill="none" stroke="#B45309" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M172 168 l20 20 38 -42" fill="none" stroke="#B45309" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="92" cy="96" r="22" fill="none" stroke="#EFE0C8" stroke-width="3" opacity="0.6"/>
+  <circle cx="92" cy="96" r="7" fill="#EFE0C8" opacity="0.6"/>
+  <rect x="80" y="118" width="24" height="16" rx="3" fill="#EFE0C8" opacity="0.4"/>
+  <circle cx="308" cy="96" r="10" fill="none" stroke="#EFE0C8" stroke-width="3" opacity="0.6"/>
+  <path d="M308 106 v16 M300 130 h16" stroke="#EFE0C8" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+  <path d="M292 150 a16 16 0 0 1 32 0" fill="none" stroke="#EFE0C8" stroke-width="3" opacity="0.4"/>
+  <text x="200" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#B8AF9E">Ảnh minh họa · an ninh &amp; PCCC hiện đại</text>
+</svg>

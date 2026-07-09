@@ -97,21 +97,21 @@ function seedLocations() {
 
   const rooms156 = [
     { name: 'Phòng Ban Công 1', room_type: 'balcony', price: 9000000, image: '/images/placeholder-balcony.svg' },
-    { name: 'Phòng Ban Công 2', room_type: 'balcony', price: 9000000, image: '/images/placeholder-balcony.svg' },
-    { name: 'Phòng Ban Công 3', room_type: 'balcony', price: 8500000, image: '/images/placeholder-balcony.svg' },
+    { name: 'Phòng Ban Công 2', room_type: 'balcony', price: 9000000, image: '/images/placeholder-balcony-2.svg' },
+    { name: 'Phòng Ban Công 3', room_type: 'balcony', price: 8500000, image: '/images/placeholder-balcony-3.svg' },
     { name: 'Phòng Trong 1', room_type: 'interior', price: 7500000, image: '/images/placeholder-interior.svg' },
-    { name: 'Phòng Trong 2', room_type: 'interior', price: 7500000, image: '/images/placeholder-interior.svg' },
-    { name: 'Phòng Trong 3', room_type: 'interior', price: 7800000, image: '/images/placeholder-interior.svg' },
+    { name: 'Phòng Trong 2', room_type: 'interior', price: 7500000, image: '/images/placeholder-interior-2.svg' },
+    { name: 'Phòng Trong 3', room_type: 'interior', price: 7800000, image: '/images/placeholder-interior-3.svg' },
     { name: 'Phòng Trong 4', room_type: 'interior', price: 7800000, image: '/images/placeholder-interior.svg' },
   ];
 
   const rooms220 = [
-    { name: 'Phòng Ban Công 1', room_type: 'balcony', price: 9000000, image: '/images/placeholder-balcony.svg' },
-    { name: 'Phòng Ban Công 2', room_type: 'balcony', price: 8500000, image: '/images/placeholder-balcony.svg' },
-    { name: 'Phòng Trong 1', room_type: 'interior', price: 7500000, image: '/images/placeholder-interior.svg' },
-    { name: 'Phòng Trong 2', room_type: 'interior', price: 7500000, image: '/images/placeholder-interior.svg' },
+    { name: 'Phòng Ban Công 1', room_type: 'balcony', price: 9000000, image: '/images/placeholder-balcony-2.svg' },
+    { name: 'Phòng Ban Công 2', room_type: 'balcony', price: 8500000, image: '/images/placeholder-balcony-3.svg' },
+    { name: 'Phòng Trong 1', room_type: 'interior', price: 7500000, image: '/images/placeholder-interior-2.svg' },
+    { name: 'Phòng Trong 2', room_type: 'interior', price: 7500000, image: '/images/placeholder-interior-3.svg' },
     { name: 'Phòng Trong 3', room_type: 'interior', price: 7800000, image: '/images/placeholder-interior.svg' },
-    { name: 'Phòng Trong 4', room_type: 'interior', price: 7800000, image: '/images/placeholder-interior.svg' },
+    { name: 'Phòng Trong 4', room_type: 'interior', price: 7800000, image: '/images/placeholder-interior-2.svg' },
   ];
 
   const seedRooms = (locationRow, prefix, rooms) => {

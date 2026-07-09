@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Ảnh minh họa phòng trong Cozy House">
+  <rect width="400" height="300" fill="#EFE6D2"/>
+  <rect x="24" y="24" width="352" height="252" rx="16" fill="#FDFBF7"/>
+  <rect x="214" y="118" width="138" height="100" rx="10" fill="#E7E0D3"/>
+  <rect x="292" y="130" width="52" height="16" rx="6" fill="#FDFBF7"/>
+  <rect x="226" y="154" width="118" height="52" rx="6" fill="#B45309" opacity="0.4"/>
+  <rect x="52" y="68" width="120" height="150" rx="10" fill="#EFE5D3"/>
+  <rect x="66" y="84" width="92" height="60" rx="6" fill="#FDFBF7"/>
+  <circle cx="112" cy="114" r="16" fill="#B45309" opacity="0.45"/>
+  <rect x="66" y="154" width="92" height="10" rx="5" fill="#DED4BC"/>
+  <rect x="66" y="172" width="65" height="8" rx="4" fill="#E2D8C0"/>
+  <rect x="66" y="188" width="80" height="8" rx="4" fill="#E2D8C0"/>
+  <circle cx="190" cy="238" r="14" fill="#8FA876" opacity="0.5"/>
+  <rect x="183" y="250" width="14" height="18" rx="3" fill="#C9BFA8"/>
+  <rect x="214" y="228" width="138" height="10" rx="5" fill="#E7E0D3"/>
+  <text x="200" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#78716C">Ảnh minh họa · phòng trong</text>
+</svg>
