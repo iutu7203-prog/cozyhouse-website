@@ -12,6 +12,8 @@
       </div>
     </div>
 
+    <% if (deleted) { %><div class="form-success">Đã xóa phòng.</div><% } %>
+
     <div class="stat-grid">
       <div class="stat-card">
         <div class="stat-num"><%= stats.total %></div>
@@ -30,8 +32,11 @@
     <% locations.forEach(function(loc) { %>
       <div class="admin-card">
         <div class="admin-topbar">
-          <h3 class="mb-0"><%= loc.name %></h3>
-          <a href="/admin/co-so/<%= loc.id %>" class="btn btn-outline btn-sm">Sửa thông tin chi nhánh</a>
+          <h3 class="mb-0"><%= loc.name %> <span class="section-lead mb-0">(<%= loc.rooms.length %> phòng)</span></h3>
+          <div class="row-actions">
+            <a href="/admin/co-so/<%= loc.id %>/phong-moi" class="btn btn-primary btn-sm">+ Thêm phòng</a>
+            <a href="/admin/co-so/<%= loc.id %>" class="btn btn-outline btn-sm">Sửa thông tin chi nhánh</a>
+          </div>
         </div>
         <div class="table-scroll">
           <table class="admin-table">
@@ -45,9 +50,19 @@
                 <td><%= fmt.roomTypeLabel(room.room_type) %></td>
                 <td><%= fmt.formatCurrency(room.price) %></td>
                 <td><span class="room-status <%= room.status %>"><%= room.status === 'available' ? 'Còn trống' : 'Đã cho thuê' %></span></td>
-                <td><a href="/admin/phong/<%= room.id %>" class="btn btn-outline btn-sm">Sửa</a></td>
+                <td>
+                  <div class="row-actions">
+                    <a href="/admin/phong/<%= room.id %>" class="btn btn-outline btn-sm">Sửa</a>
+                    <form action="/admin/phong/<%= room.id %>/xoa" method="POST" data-confirm="Xóa phòng &quot;<%= room.name %>&quot;? Hành động này không thể hoàn tác.">
+                      <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                    </form>
+                  </div>
+                </td>
               </tr>
               <% }) %>
+              <% if (!loc.rooms.length) { %>
+              <tr><td colspan="5" class="section-lead mb-0">Chi nhánh chưa có phòng nào. Bấm "+ Thêm phòng" để tạo phòng đầu tiên.</td></tr>
+              <% } %>
             </tbody>
           </table>
         </div>

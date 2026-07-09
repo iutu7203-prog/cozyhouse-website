@@ -99,6 +99,23 @@ function getRoomStats() {
   return { total, available, occupied: total - available };
 }
 
+function getMaxDisplayOrder(locationId) {
+  const row = db.prepare('SELECT MAX(display_order) AS m FROM rooms WHERE location_id = ?').get(locationId);
+  return row.m || 0;
+}
+
+function createRoom(fields) {
+  const info = db.prepare(`
+    INSERT INTO rooms (location_id, slug, name, room_type, price, status, area_m2, description, amenities, image, display_order)
+    VALUES (@location_id, @slug, @name, @room_type, @price, @status, @area_m2, @description, @amenities, @image, @display_order)
+  `).run(fields);
+  return info.lastInsertRowid;
+}
+
+function deleteRoom(id) {
+  db.prepare('DELETE FROM rooms WHERE id = ?').run(id);
+}
+
 // ---- Admin users ----
 function getAdminByUsername(username) {
   return db.prepare('SELECT * FROM admin_users WHERE username = ?').get(username);
@@ -145,6 +162,9 @@ module.exports = {
   getAllRoomsWithLocation,
   updateRoom,
   getRoomStats,
+  getMaxDisplayOrder,
+  createRoom,
+  deleteRoom,
   getAdminByUsername,
   updateAdminPassword,
   createContactMessage,

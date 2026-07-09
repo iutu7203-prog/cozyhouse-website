@@ -10,6 +10,7 @@ function withRoomSummary(location) {
   return {
     ...location,
     rooms,
+    total_rooms: rooms.length,
     availableCount: available.length,
     minPrice: prices.length ? Math.min(...prices) : 0,
     maxPrice: prices.length ? Math.max(...prices) : 0,
@@ -35,6 +36,7 @@ router.get('/co-so/:slug', (req, res) => {
   const rooms = q.getRoomsByLocationId(location.id);
   const balconyRooms = rooms.filter((r) => r.room_type === 'balcony');
   const interiorRooms = rooms.filter((r) => r.room_type === 'interior');
+  location.total_rooms = rooms.length;
   res.render('location', {
     title: `${location.name} - ${location.address}`,
     location,

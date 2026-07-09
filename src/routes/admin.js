@@ -3,8 +3,25 @@ const bcrypt = require('bcryptjs');
 const q = require('../db/queries');
 const { requireAdmin } = require('../middleware/auth');
 const { upload } = require('../middleware/upload');
+const { slugify } = require('../utils/slug');
 
 const router = express.Router();
+
+const DEFAULT_AMENITIES = 'Giường nệm,Tủ quần áo,Bàn trang điểm,Tủ lạnh,Máy lạnh,Máy giặt,WC riêng';
+const DEFAULT_IMAGE_BY_TYPE = {
+  balcony: '/images/placeholder-balcony.svg',
+  interior: '/images/placeholder-interior.svg',
+};
+
+function ensureUniqueSlug(baseSlug) {
+  let slug = baseSlug;
+  let n = 2;
+  while (q.getRoomBySlug(slug)) {
+    slug = `${baseSlug}-${n}`;
+    n += 1;
+  }
+  return slug;
+}
 
 router.get('/login', (req, res) => {
   if (req.session && req.session.adminId) {
@@ -55,7 +72,13 @@ router.get('/', (req, res) => {
     rooms: q.getRoomsByLocationId(loc.id),
   }));
   const stats = q.getRoomStats();
-  res.render('admin/dashboard', { title: 'Trang quản trị - Cozy House', locations, stats, unreadCount: res.locals.unreadCount });
+  res.render('admin/dashboard', {
+    title: 'Trang quản trị - Cozy House',
+    locations,
+    stats,
+    unreadCount: res.locals.unreadCount,
+    deleted: req.query.deleted === '1',
+  });
 });
 
 // ---- Rooms ----
@@ -63,7 +86,13 @@ router.get('/phong/:id', (req, res) => {
   const room = q.getRoomById(req.params.id);
   if (!room) return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
   const location = q.getLocationById(room.location_id);
-  res.render('admin/room-edit', { title: `Sửa phòng: ${room.name}`, room, location, saved: req.query.saved === '1' });
+  res.render('admin/room-edit', {
+    title: `Sửa phòng: ${room.name}`,
+    room,
+    location,
+    saved: req.query.saved === '1',
+    created: req.query.created === '1',
+  });
 });
 
 router.post('/phong/:id', upload.single('image'), (req, res) => {
@@ -86,6 +115,62 @@ router.post('/phong/:id', upload.single('image'), (req, res) => {
 
   q.updateRoom(room.id, fields);
   res.redirect(`/admin/phong/${room.id}?saved=1`);
+});
+
+router.post('/phong/:id/xoa', (req, res) => {
+  const room = q.getRoomById(req.params.id);
+  if (!room) return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
+  q.deleteRoom(room.id);
+  res.redirect('/admin?deleted=1');
+});
+
+router.get('/co-so/:id/phong-moi', (req, res) => {
+  const location = q.getLocationById(req.params.id);
+  if (!location) return res.status(404).render('404', { title: 'Không tìm thấy chi nhánh' });
+  res.render('admin/room-new', {
+    title: `Thêm phòng mới - ${location.name}`,
+    location,
+    error: null,
+    formData: { room_type: 'balcony', amenities: DEFAULT_AMENITIES },
+  });
+});
+
+router.post('/co-so/:id/phong-moi', upload.single('image'), (req, res) => {
+  const location = q.getLocationById(req.params.id);
+  if (!location) return res.status(404).render('404', { title: 'Không tìm thấy chi nhánh' });
+
+  const { name, room_type, price, status, area_m2, description, amenities } = req.body;
+  const cleanName = (name || '').trim();
+  const cleanRoomType = room_type === 'balcony' ? 'balcony' : 'interior';
+
+  if (!cleanName) {
+    return res.status(400).render('admin/room-new', {
+      title: `Thêm phòng mới - ${location.name}`,
+      location,
+      error: 'Vui lòng nhập tên phòng.',
+      formData: req.body,
+    });
+  }
+
+  const locationPrefix = location.slug.split('-')[0];
+  const baseSlug = slugify(`${locationPrefix}-${cleanName}`);
+  const slug = ensureUniqueSlug(baseSlug);
+
+  const roomId = q.createRoom({
+    location_id: location.id,
+    slug,
+    name: cleanName,
+    room_type: cleanRoomType,
+    price: Math.max(0, parseInt(price, 10) || 0),
+    status: status === 'occupied' ? 'occupied' : 'available',
+    area_m2: area_m2 ? parseFloat(area_m2) : null,
+    description: (description || '').trim(),
+    amenities: (amenities || '').trim() || DEFAULT_AMENITIES,
+    image: req.file ? `/uploads/${req.file.filename}` : DEFAULT_IMAGE_BY_TYPE[cleanRoomType],
+    display_order: q.getMaxDisplayOrder(location.id) + 1,
+  });
+
+  res.redirect(`/admin/phong/${roomId}?created=1`);
 });
 
 // ---- Locations ----

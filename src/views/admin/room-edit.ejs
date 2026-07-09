@@ -14,6 +14,7 @@
     </div>
 
     <% if (saved) { %><div class="form-success">Đã lưu thay đổi.</div><% } %>
+    <% if (created) { %><div class="form-success">Đã tạo phòng mới thành công.</div><% } %>
 
     <div class="admin-card">
       <form action="/admin/phong/<%= room.id %>" method="POST" enctype="multipart/form-data" data-loading-submit>
@@ -71,6 +72,14 @@
         </div>
 
         <button type="submit" class="btn btn-primary u-mt-5">Lưu thay đổi</button>
+      </form>
+    </div>
+
+    <div class="admin-card">
+      <h3>Xóa phòng</h3>
+      <p class="section-lead">Xóa vĩnh viễn phòng này khỏi website. Hành động không thể hoàn tác.</p>
+      <form action="/admin/phong/<%= room.id %>/xoa" method="POST" data-confirm="Xóa phòng &quot;<%= room.name %>&quot;? Hành động này không thể hoàn tác.">
+        <button type="submit" class="btn btn-danger">Xóa phòng này</button>
       </form>
     </div>
   </main>
