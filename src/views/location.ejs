@@ -45,8 +45,10 @@
     <h2 class="section-title">Phòng ban công (<%= balconyRooms.length %>)</h2>
     <p class="section-lead u-mb-8">Phòng có cửa sổ/ban công thoáng khí, đón sáng tự nhiên.</p>
     <div class="grid-3">
-      <% balconyRooms.forEach(function(room) { %>
-        <%- include('partials/room-card', { room }) %>
+      <% balconyRooms.forEach(function(room, idx) { %>
+        <div class="reveal reveal-delay-<%= (idx % 3) + 1 %>">
+          <%- include('partials/room-card', { room }) %>
+        </div>
       <% }) %>
     </div>
   </div>
@@ -59,8 +61,10 @@
     <h2 class="section-title">Phòng trong (<%= interiorRooms.length %>)</h2>
     <p class="section-lead u-mb-8">Phòng khép kín, riêng tư, đầy đủ nội thất tiện nghi.</p>
     <div class="grid-3">
-      <% interiorRooms.forEach(function(room) { %>
-        <%- include('partials/room-card', { room }) %>
+      <% interiorRooms.forEach(function(room, idx) { %>
+        <div class="reveal reveal-delay-<%= (idx % 3) + 1 %>">
+          <%- include('partials/room-card', { room }) %>
+        </div>
       <% }) %>
     </div>
   </div>
