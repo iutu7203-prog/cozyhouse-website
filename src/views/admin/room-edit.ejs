@@ -63,7 +63,7 @@
         </div>
 
         <div class="form-group mb-0">
-          <label class="form-label">Ảnh phòng</label>
+          <label class="form-label">Ảnh đại diện (hiển thị ở danh sách phòng, trang chủ)</label>
           <div class="current-image-preview">
             <img src="<%= room.image %>" alt="Ảnh hiện tại của <%= room.name %>">
           </div>
@@ -72,6 +72,38 @@
         </div>
 
         <button type="submit" class="btn btn-primary u-mt-5">Lưu thay đổi</button>
+      </form>
+    </div>
+
+    <div class="admin-card">
+      <h3>Thư viện ảnh chi tiết phòng (<%= galleryImages.length + 1 %> ảnh)</h3>
+      <p class="section-lead mb-0">Các ảnh này hiển thị thêm ở trang chi tiết phòng, bên cạnh ảnh đại diện phía trên.</p>
+
+      <% if (imageAdded) { %><div class="form-success u-mt-5">Đã thêm ảnh vào thư viện.</div><% } %>
+      <% if (imageDeleted) { %><div class="form-success u-mt-5">Đã xóa ảnh khỏi thư viện.</div><% } %>
+
+      <div class="gallery-grid u-mt-5">
+        <div class="gallery-thumb">
+          <img src="<%= room.image %>" alt="Ảnh đại diện của <%= room.name %>">
+          <span class="badge">Ảnh đại diện</span>
+        </div>
+        <% galleryImages.forEach(function(img) { %>
+          <div class="gallery-thumb">
+            <img src="<%= img.image %>" alt="Ảnh phòng <%= room.name %>">
+            <form action="/admin/phong/<%= room.id %>/anh/<%= img.id %>/xoa" method="POST" data-confirm="Xóa ảnh này khỏi thư viện?">
+              <button type="submit" class="gallery-thumb-delete" aria-label="Xóa ảnh này">&times;</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+
+      <form action="/admin/phong/<%= room.id %>/anh" method="POST" enctype="multipart/form-data" class="u-mt-8" data-loading-submit>
+        <div class="form-group mb-0">
+          <label class="form-label" for="gallery-image">Thêm ảnh mới vào thư viện</label>
+          <input type="file" id="gallery-image" name="image" accept="image/jpeg,image/png,image/webp" required>
+          <p class="form-help">Ảnh JPG/PNG/WEBP, tối đa 4MB.</p>
+        </div>
+        <button type="submit" class="btn btn-outline u-mt-5">Thêm ảnh</button>
       </form>
     </div>
 

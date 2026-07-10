@@ -12,6 +12,11 @@ const DEFAULT_IMAGE_BY_TYPE = {
   balcony: '/images/placeholder-balcony.svg',
   interior: '/images/placeholder-interior.svg',
 };
+const TYPE_VARIANTS = {
+  balcony: ['/images/placeholder-balcony.svg', '/images/placeholder-balcony-2.svg', '/images/placeholder-balcony-3.svg'],
+  interior: ['/images/placeholder-interior.svg', '/images/placeholder-interior-2.svg', '/images/placeholder-interior-3.svg'],
+};
+const UNIVERSAL_DETAIL_IMAGES = ['/images/placeholder-detail-closet.svg', '/images/placeholder-detail-desk.svg'];
 
 function ensureUniqueSlug(baseSlug) {
   let slug = baseSlug;
@@ -86,12 +91,16 @@ router.get('/phong/:id', (req, res) => {
   const room = q.getRoomById(req.params.id);
   if (!room) return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
   const location = q.getLocationById(room.location_id);
+  const galleryImages = q.getRoomImages(room.id);
   res.render('admin/room-edit', {
     title: `Sửa phòng: ${room.name}`,
     room,
     location,
+    galleryImages,
     saved: req.query.saved === '1',
     created: req.query.created === '1',
+    imageAdded: req.query.imageAdded === '1',
+    imageDeleted: req.query.imageDeleted === '1',
   });
 });
 
@@ -122,6 +131,26 @@ router.post('/phong/:id/xoa', (req, res) => {
   if (!room) return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
   q.deleteRoom(room.id);
   res.redirect('/admin?deleted=1');
+});
+
+router.post('/phong/:id/anh', upload.single('image'), (req, res) => {
+  const room = q.getRoomById(req.params.id);
+  if (!room) return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
+  if (!req.file) {
+    return res.redirect(`/admin/phong/${room.id}`);
+  }
+  q.addRoomImage(room.id, `/uploads/${req.file.filename}`);
+  res.redirect(`/admin/phong/${room.id}?imageAdded=1`);
+});
+
+router.post('/phong/:id/anh/:imageId/xoa', (req, res) => {
+  const room = q.getRoomById(req.params.id);
+  if (!room) return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
+  const image = q.getRoomImageById(req.params.imageId);
+  if (image && image.room_id === room.id) {
+    q.deleteRoomImage(image.id);
+  }
+  res.redirect(`/admin/phong/${room.id}?imageDeleted=1`);
 });
 
 router.get('/co-so/:id/phong-moi', (req, res) => {
@@ -169,6 +198,10 @@ router.post('/co-so/:id/phong-moi', upload.single('image'), (req, res) => {
     image: req.file ? `/uploads/${req.file.filename}` : DEFAULT_IMAGE_BY_TYPE[cleanRoomType],
     display_order: q.getMaxDisplayOrder(location.id) + 1,
   });
+
+  const primaryImage = req.file ? `/uploads/${req.file.filename}` : DEFAULT_IMAGE_BY_TYPE[cleanRoomType];
+  const otherVariants = TYPE_VARIANTS[cleanRoomType].filter((img) => img !== primaryImage);
+  [...otherVariants, ...UNIVERSAL_DETAIL_IMAGES].forEach((image) => q.addRoomImage(roomId, image));
 
   res.redirect(`/admin/phong/${roomId}?created=1`);
 });

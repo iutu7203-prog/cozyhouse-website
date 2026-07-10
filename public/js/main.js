@@ -152,4 +152,19 @@
     if (prevBtn) prevBtn.addEventListener('click', function () { scrollByItem(-1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { scrollByItem(1); });
   });
+
+  // Thu vien anh trang chi tiet phong: click thumbnail de doi anh chinh
+  var mainPhoto = document.getElementById('room-main-photo');
+  var thumbButtons = document.querySelectorAll('.room-gallery-thumb');
+  if (mainPhoto && thumbButtons.length) {
+    thumbButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var src = btn.getAttribute('data-photo-src');
+        if (!src) return;
+        mainPhoto.src = src;
+        thumbButtons.forEach(function (b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+      });
+    });
+  }
 })();

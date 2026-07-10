@@ -50,7 +50,9 @@ router.get('/phong/:slug', (req, res) => {
   if (!room) {
     return res.status(404).render('404', { title: 'Không tìm thấy phòng' });
   }
-  res.render('room', { title: `${room.name} - ${room.location_name}`, room });
+  const galleryImages = q.getRoomImages(room.id);
+  const allPhotos = [room.image, ...galleryImages.map((img) => img.image)];
+  res.render('room', { title: `${room.name} - ${room.location_name}`, room, allPhotos });
 });
 
 router.get('/bang-gia', (req, res) => {

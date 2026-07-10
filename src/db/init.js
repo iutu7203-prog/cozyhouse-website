@@ -32,6 +32,13 @@ function migrate() {
       display_order INTEGER NOT NULL DEFAULT 0
     );
 
+    CREATE TABLE IF NOT EXISTS room_images (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      room_id INTEGER NOT NULL REFERENCES rooms(id) ON DELETE CASCADE,
+      image TEXT NOT NULL,
+      display_order INTEGER NOT NULL DEFAULT 0
+    );
+
     CREATE TABLE IF NOT EXISTS settings (
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL DEFAULT ''
@@ -57,6 +64,12 @@ function migrate() {
 
 const DEFAULT_AMENITIES = ['Giường nệm', 'Tủ quần áo', 'Bàn trang điểm', 'Tủ lạnh', 'Máy lạnh', 'Máy giặt', 'WC riêng'].join(',');
 
+const TYPE_VARIANTS = {
+  balcony: ['/images/placeholder-balcony.svg', '/images/placeholder-balcony-2.svg', '/images/placeholder-balcony-3.svg'],
+  interior: ['/images/placeholder-interior.svg', '/images/placeholder-interior-2.svg', '/images/placeholder-interior-3.svg'],
+};
+const UNIVERSAL_DETAIL_IMAGES = ['/images/placeholder-detail-closet.svg', '/images/placeholder-detail-desk.svg'];
+
 function seedLocations() {
   const count = db.prepare('SELECT COUNT(*) AS c FROM locations').get().c;
   if (count > 0) return;
@@ -69,6 +82,11 @@ function seedLocations() {
   const insertRoom = db.prepare(`
     INSERT INTO rooms (location_id, slug, name, room_type, price, status, area_m2, description, amenities, image, display_order)
     VALUES (@location_id, @slug, @name, @room_type, @price, 'available', @area_m2, @description, @amenities, @image, @display_order)
+  `);
+
+  const insertRoomImage = db.prepare(`
+    INSERT INTO room_images (room_id, image, display_order)
+    VALUES (@room_id, @image, @display_order)
   `);
 
   const loc156 = insertLocation.run({
@@ -118,7 +136,7 @@ function seedLocations() {
     rooms.forEach((room, idx) => {
       const typeSlug = room.room_type === 'balcony' ? 'ban-cong' : 'trong';
       const numberInType = rooms.slice(0, idx + 1).filter((r) => r.room_type === room.room_type).length;
-      insertRoom.run({
+      const info = insertRoom.run({
         location_id: locationRow.lastInsertRowid,
         slug: `${prefix}-${typeSlug}-${numberInType}`,
         name: room.name,
@@ -129,6 +147,12 @@ function seedLocations() {
         amenities: DEFAULT_AMENITIES,
         image: room.image,
         display_order: idx + 1,
+      });
+
+      const otherVariants = TYPE_VARIANTS[room.room_type].filter((img) => img !== room.image);
+      const galleryExtras = [...otherVariants, ...UNIVERSAL_DETAIL_IMAGES];
+      galleryExtras.forEach((image, imgIdx) => {
+        insertRoomImage.run({ room_id: info.lastInsertRowid, image, display_order: imgIdx + 1 });
       });
     });
   };
@@ -174,11 +198,34 @@ function seedAdmin() {
   console.log(`Da tao tai khoan admin: ${username} (mat khau lay tu bien moi truong ADMIN_PASSWORD)`);
 }
 
+// Cap nhat cho cac phong da ton tai tu truoc khi co bang room_images
+// (vd: sau khi nang cap code tren mot database cu), khong dung toi
+// khi phong da co san anh thu vien.
+function backfillRoomImages() {
+  const insertRoomImage = db.prepare(`
+    INSERT INTO room_images (room_id, image, display_order)
+    VALUES (@room_id, @image, @display_order)
+  `);
+
+  const rooms = db.prepare('SELECT id, room_type, image FROM rooms').all();
+  rooms.forEach((room) => {
+    const existingCount = db.prepare('SELECT COUNT(*) AS c FROM room_images WHERE room_id = ?').get(room.id).c;
+    if (existingCount > 0) return;
+
+    const otherVariants = TYPE_VARIANTS[room.room_type].filter((img) => img !== room.image);
+    const galleryExtras = [...otherVariants, ...UNIVERSAL_DETAIL_IMAGES];
+    galleryExtras.forEach((image, idx) => {
+      insertRoomImage.run({ room_id: room.id, image, display_order: idx + 1 });
+    });
+  });
+}
+
 function run() {
   migrate();
   seedLocations();
   seedSettings();
   seedAdmin();
+  backfillRoomImages();
   console.log('Khoi tao database hoan tat: data/cozyhouse.sqlite');
 }
 

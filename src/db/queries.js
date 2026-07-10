@@ -116,6 +116,30 @@ function deleteRoom(id) {
   db.prepare('DELETE FROM rooms WHERE id = ?').run(id);
 }
 
+// ---- Room gallery images ----
+function getRoomImages(roomId) {
+  return db.prepare('SELECT * FROM room_images WHERE room_id = ? ORDER BY display_order ASC').all(roomId);
+}
+
+function getMaxRoomImageOrder(roomId) {
+  const row = db.prepare('SELECT MAX(display_order) AS m FROM room_images WHERE room_id = ?').get(roomId);
+  return row.m || 0;
+}
+
+function addRoomImage(roomId, image) {
+  const displayOrder = getMaxRoomImageOrder(roomId) + 1;
+  const info = db.prepare('INSERT INTO room_images (room_id, image, display_order) VALUES (?, ?, ?)').run(roomId, image, displayOrder);
+  return info.lastInsertRowid;
+}
+
+function getRoomImageById(id) {
+  return db.prepare('SELECT * FROM room_images WHERE id = ?').get(id);
+}
+
+function deleteRoomImage(id) {
+  db.prepare('DELETE FROM room_images WHERE id = ?').run(id);
+}
+
 // ---- Admin users ----
 function getAdminByUsername(username) {
   return db.prepare('SELECT * FROM admin_users WHERE username = ?').get(username);
@@ -165,6 +189,10 @@ module.exports = {
   getMaxDisplayOrder,
   createRoom,
   deleteRoom,
+  getRoomImages,
+  addRoomImage,
+  getRoomImageById,
+  deleteRoomImage,
   getAdminByUsername,
   updateAdminPassword,
   createContactMessage,

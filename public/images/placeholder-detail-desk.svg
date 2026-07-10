@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Ảnh minh họa góc bàn trang điểm Cozy House">
+  <rect width="400" height="300" fill="#F3ECDC"/>
+  <rect x="24" y="24" width="352" height="252" rx="16" fill="#FDFBF7"/>
+  <rect x="70" y="70" width="90" height="130" rx="6" fill="#292524" opacity="0.85"/>
+  <ellipse cx="115" cy="135" rx="34" ry="55" fill="#3B3532"/>
+  <rect x="230" y="150" width="110" height="66" rx="6" fill="#E7E0D3"/>
+  <rect x="242" y="160" width="86" height="10" rx="5" fill="#FDFBF7"/>
+  <circle cx="250" cy="192" r="9" fill="#B45309" opacity="0.5"/>
+  <rect x="266" y="188" width="50" height="8" rx="4" fill="#DED4BC"/>
+  <rect x="60" y="200" width="280" height="14" rx="6" fill="#EFE5D3"/>
+  <rect x="60" y="214" width="280" height="44" rx="4" fill="#D8CDB4"/>
+  <rect x="90" y="222" width="26" height="28" rx="3" fill="#FDFBF7" opacity="0.6"/>
+  <rect x="130" y="222" width="26" height="28" rx="3" fill="#FDFBF7" opacity="0.4"/>
+  <rect x="240" y="222" width="26" height="28" rx="3" fill="#FDFBF7" opacity="0.5"/>
+  <rect x="280" y="222" width="26" height="28" rx="3" fill="#FDFBF7" opacity="0.35"/>
+  <text x="200" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#78716C">Ảnh minh họa · góc bàn trang điểm</text>
+</svg>

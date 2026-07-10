@@ -13,8 +13,19 @@
     </div>
 
     <div class="hero-grid">
-      <div class="hero-visual">
-        <img src="<%= room.image %>" alt="Ảnh minh họa <%= room.name %>" width="640" height="800">
+      <div class="room-gallery">
+        <div class="hero-visual room-gallery-main">
+          <img id="room-main-photo" src="<%= allPhotos[0] %>" alt="Ảnh <%= room.name %>" width="640" height="800">
+        </div>
+        <% if (allPhotos.length > 1) { %>
+        <div class="room-gallery-thumbs">
+          <% allPhotos.forEach(function(photo, idx) { %>
+            <button type="button" class="room-gallery-thumb <%= idx === 0 ? 'is-active' : '' %>" data-photo-src="<%= photo %>" aria-label="Xem ảnh <%= idx + 1 %>">
+              <img src="<%= photo %>" alt="Ảnh <%= idx + 1 %> của <%= room.name %>">
+            </button>
+          <% }) %>
+        </div>
+        <% } %>
       </div>
       <div>
         <span class="room-status <%= room.status %>">
