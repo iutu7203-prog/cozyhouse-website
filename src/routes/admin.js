@@ -212,16 +212,21 @@ router.get('/cai-dat', (req, res) => {
   });
 });
 
-router.post('/cai-dat', (req, res) => {
+router.post('/cai-dat', upload.single('hero_bg_image'), (req, res) => {
   const {
     site_name, owner_name, phone, zalo, facebook_url, working_hours,
     hero_title, hero_subtitle, electricity_price, water_price, service_fee,
   } = req.body;
 
-  q.updateSettings({
+  const fields = {
     site_name, owner_name, phone, zalo, facebook_url, working_hours,
     hero_title, hero_subtitle, electricity_price, water_price, service_fee,
-  });
+  };
+  if (req.file) {
+    fields.hero_bg_image = `/uploads/${req.file.filename}`;
+  }
+
+  q.updateSettings(fields);
 
   res.redirect('/admin/cai-dat?saved=1');
 });

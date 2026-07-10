@@ -146,6 +146,7 @@ const DEFAULT_SETTINGS = {
   working_hours: '8:00 - 20:00 hằng ngày',
   hero_title: 'Phòng trọ đầy đủ nội thất, an toàn, ngay trung tâm',
   hero_subtitle: 'Hệ thống Cozy House gồm 2 chi nhánh trên đường Cộng Hòa, Phường Bảy Hiền, TP. Hồ Chí Minh. Phòng full nội thất, an ninh - PCCC hiện đại, dọn vào ở ngay.',
+  hero_bg_image: '/images/placeholder-156-hero.svg',
   electricity_price: '4000',
   water_price: '100000',
   service_fee: '300000',

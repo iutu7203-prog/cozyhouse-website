@@ -15,7 +15,7 @@
 
     <div class="admin-card">
       <h3>Thông tin liên hệ &amp; nội dung trang chủ</h3>
-      <form action="/admin/cai-dat" method="POST" data-loading-submit>
+      <form action="/admin/cai-dat" method="POST" enctype="multipart/form-data" data-loading-submit>
         <div class="grid-2">
           <div class="form-group">
             <label class="form-label" for="site_name">Tên website</label>
@@ -53,6 +53,14 @@
         <div class="form-group">
           <label class="form-label" for="hero_subtitle">Mô tả ngắn trang chủ</label>
           <textarea id="hero_subtitle" name="hero_subtitle" rows="3"><%= settings.hero_subtitle %></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ảnh nền trang chủ (khu vực hero)</label>
+          <div class="current-image-preview">
+            <img src="<%= settings.hero_bg_image %>" alt="Ảnh nền trang chủ hiện tại">
+          </div>
+          <input type="file" name="hero_bg_image" accept="image/jpeg,image/png,image/webp">
+          <p class="form-help">Ảnh JPG/PNG/WEBP, tối đa 4MB. Để trống nếu không muốn đổi ảnh. Nên dùng ảnh ngang, sáng rõ ở phía bên phải vì bên trái sẽ bị phủ tối để chữ dễ đọc.</p>
         </div>
         <div class="grid-3">
           <div class="form-group">
